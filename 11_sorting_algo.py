@@ -147,14 +147,9 @@ def binarySearch1(data:list,itme:int)->bool:
 # obj = binarySearch1(li,itme)
 # print(obj)
 
-
-# Binary Search in python
-
-
 def binarySearch2(data:list, itme:int)->bool:
     low,high =0, len(data)-1
     while low <= high:
-
         mid = low + (high - low)//2
         if data[mid] > itme:
             high = mid - 1
@@ -162,11 +157,10 @@ def binarySearch2(data:list, itme:int)->bool:
             low = mid + 1
         else:
             return True
-        
     return False
 
-l = [11,65,12,7,24,6,24,9]
-li = margesort(l)
-itme = 8
-obj = binarySearch2(li,itme)
-print(obj)
+# l = [11,65,12,7,24,6,24,9]
+# li = margesort(l)
+# itme = 9
+# obj = binarySearch2(li,itme)
+# print(obj)

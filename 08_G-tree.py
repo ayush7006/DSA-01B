@@ -27,8 +27,6 @@ class TreeNode:
 
 def build_product_tree():
     
-    
-
     laptop = TreeNode("Laptop")
     laptop.add_child(TreeNode("Mac"))
     laptop.add_child(TreeNode("Surface"))
