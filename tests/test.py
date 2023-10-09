@@ -879,6 +879,127 @@ ms_data = {
 
 
 
-# data = VehicleTripCustomField.objects.get_active_field_ids(tenant)
-# a = [{"id": str(_['id']), "field_label": _['field_label'], "type": "custom", "is_active": False}for _ in data]
 
+
+
+def excel_data_import3():
+    file_path = '/home/ayushgurjar/Downloads/DSA-01B/plant to cp code mapping.xlsx'
+
+    if not os.path.exists(file_path):
+        print("File not found at the specified path")
+
+    try:
+        workbook = load_workbook(filename=file_path, read_only=True)
+        sheet = workbook.active
+        # print(sheet)
+    except Exception as e:
+        print(f'Error reading the Excel file {str(e)}')
+
+    file = {}
+    total = 0
+    try:
+        for row in sheet.iter_rows(min_row=2,values_only=True):
+            if row[1] == None:
+                continue
+            # print(row[1],"----",row[4])
+           
+            file[row[1]] = row[4]
+            total+=1
+    except Exception as e:
+        print(f'Error importing data into the database: {str(e)}')
+
+    print(file)
+    # filename = "cp code mapping.json"
+    # with open(filename, "w") as f:
+    #     json.dump(file, f, indent=4)
+
+# excel_data_import3()
+# uvicorn main:app --host 127.0.0.1 --port 3000
+
+    # data = {
+    #     "feature" : data['feature'],    -
+    #     "dray_Scac" : data['dray_Scac'],   -
+    #     "empty_Indicator" : data['empty_Indicator'],   - 
+    #     "carrier_Scac_Code" : data['carrier_Scac_Code'],  - 
+    #     "container_Number" : data['container_Number'],   
+    #     "booking_Number" : data['booking_Number'],     
+    #     "shipment_Number" : data['shipment_Number'],
+    #     "container_Pool_Id" : data['container_Pool_Id'],
+    #     "container_Type_Code" : data['container_Type_Code'],
+    #     "tender_Request_Number" : data['tender_Request_Number'],
+    #     "shipper_Name" : data['shipper_Name'],
+    #     "milestone" : data['milestone'],
+    #     "milestone_Timestamp" : data['milestone_Timestamp'],
+    #     "milestone_Time" : data['milestone_Time'],
+    #     "milestone_Location" : data['milestone_Location'] }
+
+# {
+#         "feature" : "BOTH",     -
+#         "dray_Scac" : "PRIM",    -
+#         "empty_Indicator" : "Empty",      -?
+#         "carrier_Scac_Code" : "HLCU",      -
+#         "container_Number" : "TBNU01",      - or -u
+#         "booking_Number" : "3645546646",    -
+#         "shipment_Number" : "0042239933",   -  
+#         "container_Pool_Id" : "",           - 
+#         "container_Type_Code" : "4010",     -
+#         "tender_Request_Number" : 23071800001,  --
+#         "shipper_Name" : "",  -u
+#         "milestone" : "Full Delivery",   -u
+#         "milestone_Timestamp" : "2023-Aug-05 10:25:00",  -u
+#         "milestone_Time" : "10:25",   ?
+#         "milestone_Location" : "DP World"  ??
+# }
+
+# "code": "AE_EXDOWDXB_GF63",
+# "name": "HORIZON TERMINALS",  ?
+
+# "shipmentReferenceNumber": "0042241187"
+# "carrierScacCode": "ONEY"
+# "tenderRequestNumber": 23062200040,
+# "bookingNumber": "DXBD00863500",
+# "containerType": 2000,
+
+# "containerNumber": "TBNU01",
+# data = {}
+# tender =1 #await db['tender_details'].find_one({"tenderRequestNumber":"tender number"})
+
+# codes = {'C092': 'CP_000530', 'C093': 'CP_000530', 'C094': 'CP_000530', 'CC12': 'CP_000538',
+#           'CC13': 'CP_000538', 'CC14': 'CP_000538', 'GH10': 'CP_000540', 'GH11': 'CP_000540',
+#             'GH12': 'CP_000540', 'C095': 'CP_000554', 'C096': 'CP_000554', 'C097': 'CP_000554',
+#               'GF61': 'CP_000556', 'GF62': 'CP_000556', 'GF63': 'CP_000556', 'C541': 'CP_000558',
+#                 'C542': 'CP_000558', 'C543': 'CP_000558', 'CD14': 'CP_000560', 'CD15': 'CP_000560',
+#                   'CD16': 'CP_000560'}
+# codes = {'C092': 'CP_000530', 'C093': 'CP_000530', 'C094': 'CP_000530', 'CC12': 'CP_000538',
+#           'CC13': 'CP_000538', 'CC14': 'CP_000538', 'GH10': 'CP_000540', 'GH11': 'CP_000540',
+#             'GH12': 'CP_000540', 'C095': 'CP_000554', 'C096': 'CP_000554', 'C097': 'CP_000554',
+#               'GF61': 'CP_000556', 'GF62': 'CP_000556', 'GF63': 'CP_000556', 'C541': 'CP_000558',
+#                 'C542': 'CP_000558', 'C543': 'CP_000558', 'CD14': 'CP_000560', 'CD15': 'CP_000560',
+#                   'CD16': 'CP_000560'}
+# code = tender['originAddress']['code'].split("_")
+
+# data['container_Pool_Id'] = codes[code[2]]
+# data['milestone_Location'] = tender['originAddress']['name']  #  ????
+# data["carrier_Scac_Code"] = tender['carrierScacCode']
+# data['shipment_Number'] = tender['shipmentReferenceNumber'] 
+# data["container_Number"] = tender['containerNumber'] #--u
+# data["booking_Number"] = tender['bookingNumber']
+# data['container_Type_Code'] = tender['containerType']
+# # data['tender_Request_Number'] = tender_number
+# new = data['milestone_Time'].split(" ")[1].split(":")
+# data['milestone_Time'] =  new[0]+":"+new[1]
+
+
+res = {}
+res['invoice'] = {'due_percent' : 2562}
+res['invoice'].update({'over_due_percent' : 100})
+
+total = res['invoice']['due_percent'] + res['invoice']['over_due_percent']
+if total > 0:
+    res['invoice']['due_percent'] = round((res['invoice']['due_percent']/total)*100, 2)
+    print(100-res['invoice']['due_percent'])
+    res['invoice']['over_due_percent'] = round(100 - res['invoice']['due_percent'], 2)
+
+print(res,total)
+
+# v1/party_portal/dashboard/

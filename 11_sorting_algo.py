@@ -1,3 +1,10 @@
+"""
+"The quick brown fox jumps over the lazy dog"
+"This pangram lists four a's, one b, one c, two d's, twenty-nine e's, eight f's, three g's, five h's, eleven i's, one j,
+ one k, three l's, two m's, twenty-two n's, fifteen o's, one p, one q, seven r's, twenty-six s's, nineteen t's, four u's,
+   five v's, nine w's, two x's, four y's, and one z."
+"""
+
 def BubbleSort(data:list) -> list:
     for j in range(len(data)):
         for i in range(1,len(data)-j):
