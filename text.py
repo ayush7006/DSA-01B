@@ -235,3 +235,377 @@
 # Petty Expense - account by tenant  /
 # Pay Later - account by tenant   /
 # Vendor Advance - account by party  /
+
+# list_fields = dict()
+# custom_fields = ['ayush']
+# list_fields['list_fields'] = None
+# new_fields = list_fields['list_fields'] + custom_fields
+# print(new_fields)
+
+# TRAN-3978-3979-3980-3981
+
+# format_date_time_am_pm(convert_to_tz(parse_datetime(_['field_value']), timezone))
+
+# import datetime
+
+# def format_extras(extras):
+#     for item in extras:
+#             try:
+#                 formatted_datetime = format_date_time_am_pm(convert_to_tz(parse_datetime(item['value']), timezone))
+#                 # parsed_datetime = datetime.datetime.strptime(item['value'], "%Y-%m-%dT%H:%M")
+#                 # formatted_datetime = parsed_datetime.strftime("%Y-%m-%d %H:%M")
+#                 item['value'] = formatted_datetime
+#             except ValueError:
+#                 pass
+#     return extras
+
+# data = [
+#     {
+#         "name": "Work Order No",
+#         "value": "WO7348"
+#     },
+#     {
+#         "name": "Driver Name",
+#         "value": "ayush"
+#     },
+#     {
+#         "name": "t10",
+#         "value": "879hyuj"
+#     },
+#     {
+#         "name": "t8",
+#         "value": "asiidu793448"
+#     },
+#     {
+#         "name": "testDate",
+#         "value": "2023-10-13"
+#     },
+#     {
+#         "name": "date",
+#         "value": "2023-10-13T14:49"
+#     }
+# ]
+
+# formatted_data = format_extras(data)
+# print(formatted_data)
+
+#   git branch -m TRAN-3987 TRAN-3987-3988-3989
+
+"""
+If the default bank is Bank account type then on selection of “IMPS, NEFT, RTGS, Cheque, UPI“ we will prefill the bank,
+call api with is_tenant = False ,is_account = True ,remove_cash_account = True
+
+If user selects cash then we will not prefill anything
+If the default bank is Cash account type then on selection of “Cash“ we will prefill the bank
+call api with is_tenant = Fale ,is_account = True ,remove_cash_account = False, is_cash_account = True
+
+If user selects bank, then we will prefill tenant bank
+call api with is_tenant = True ,is_account = True ,remove_cash_account = True
+"""
+
+
+
+
+
+
+# def scroll_pagination(obj,next_cursor=None,date=None,query_filters=None,search=None,
+#                       field_to_search={},fields_to_get=[],date_field=[],due_date_field=[]):
+#     num_of_records = 20
+#     if next_cursor:
+#         if date:
+#             last_date ,created_at = base64decode(next_cursor).split(';')
+#             date_filter = Q(**{ f'{date}__lte': last_date}) & Q(created_at__lte=created_at)
+#             obj = obj.filter(date_filter)
+#         else:
+#             created_at = base64decode(next_cursor)
+#             obj = obj.filter(created_at__lte=created_at)
+
+#     if query_filters != "":
+#         obj = filter_table(obj, query_filters, datetime.now().date(),date_field,due_date_field)
+
+#     if search:
+#         or_condition = Q()
+#         for key, value in field_to_search.items():
+#             or_condition.add(Q(**{ f'{key}__icontains': value}), Q.OR)
+#             obj = obj.filter(or_condition)
+
+#     try:
+#         if date:
+#             obj = obj.order_by(f'-{date}', '-created_at')
+#         else:
+#             obj = obj.order_by('-created_at')
+#         obj = obj.values(*(fields_to_get))[0:num_of_records+1]
+#     except IndexError:
+#         obj = []
+
+#     next_cursor = ""
+#     try:
+#         if len(obj) == num_of_records+1:
+#             last_obj = obj[-1]
+#             if date:
+#                 next_cursor = base64encode(f"{str(last_obj[f'{date}'])};{str(last_obj['created_at'])}")
+#             else:
+#                 next_cursor = base64encode(f"{str(last_obj['created_at'])}")
+#             obj = obj[:num_of_records]
+#     except IndexError:
+#         pass
+
+#     return obj, next_cursor
+
+
+
+
+
+
+
+
+
+
+# filter_set = {
+#     "bill_number": {
+#         "field": "bill_number", "display": "Bill Number", 
+#         "type": "value", "values": ["Bill Number 1", "Bill Number 2"]
+#     },
+#     "vendor__display_name": {
+#         "field": "vendor__display_name", "display": "Vendor", 
+#         "type": "value", "values": ["Vendor 1", "Vendor 2"]
+#     },    
+#     "due_date": {
+#         "field": "due_date", "display": "Date",
+#         "type": "value", "values": ["Within 15 days","Within 15 to 30 days",
+#                                     "Within 30 to 45 days","Overdue",]
+#     },
+#     "bill_date": {
+#         "field": "bill_date", "display": "Bill Date",
+#         "type": "value", "values": ["In 15 days", "15-30 Days", 
+#                                     "30-45 days", "Over 45 Days"]
+#     },
+#     "new_payment_status": {
+#         "field": "new_payment_status", "display": "Payment Status",
+#         "type": "value", "values": ["Paid", "UnPaid", 
+#                                      "Partial Paid"]}
+# }
+
+
+
+
+# def filter_table(queryset, _filter_set, todaydate):
+
+#     if isinstance(_filter_set, str) and _filter_set == '[]':
+#         return queryset
+
+#     if not _filter_set:
+#         return queryset
+    
+#     try:
+#         _filter_set = json.loads(_filter_set)
+#         for _ in _filter_set:
+#             filter_set[_['key']]
+#     except:
+#         raise InvalidDataError
+    
+#     conditions = Q()
+#     kwargs = {}
+#     for _ in _filter_set:
+#         if _['key'] == 'due_date':
+#             if "Within 15 days" in _['values']:
+#                 conditions.add(Q(**{f"{_['key']}__range": [todaydate, todaydate + timedelta(days=15)]}), Q.AND)
+#             if "Within 15 to 30 days" in _['values']:
+#                 conditions.add(Q(**{f"{_['key']}__range": [todaydate + timedelta(days=15), 
+#                     todaydate + timedelta(days=30)]}), Q.AND)
+#             if "Within 30 to 45 days" in _['values']:
+#                 conditions.add(Q(**{f"{_['key']}__range": [todaydate + timedelta(days=30), 
+#                     todaydate + timedelta(days=45)]}), Q.AND)
+#             if "Overdue" in _['values']:
+#                 conditions.add(Q(**{f"{_['key']}__lte": todaydate}), Q.AND) 
+#         elif _['key'] == 'bill_date':
+#             if "In 15 days" in _['values']:
+#                 conditions.add(Q(**{f"{_['key']}__range": [todaydate - timedelta(days=15), todaydate]}), Q.AND)
+#             if "15-30 Days" in _['values']:
+#                 conditions.add(Q(**{f"{_['key']}__range": [todaydate - timedelta(days=30), 
+#                     todaydate - timedelta(days=15)]}), Q.AND)
+#             if "30-45 days" in _['values']:
+#                 conditions.add(Q(**{f"{_['key']}__range": [todaydate - timedelta(days=45), 
+#                     todaydate - timedelta(days=30)]}), Q.AND)
+#             if "Over 45 Days" in _['values']:
+#                 conditions.add(Q(**{f"{_['key']}__lt": todaydate - timedelta(days=45)}), Q.AND)
+#         else:
+#             kwargs[f"{_['key']}__in"] = _['values']
+#             conditions.add(Q(**{f"{_['key']}__in":  _['values']}), Q.AND)
+
+#     try:
+#         q = queryset.filter(conditions)
+#     except :
+#         raise InvalidDataError
+#     return q
+
+# today i fix date time issue in trip list than did changes in get default bank than worked Pagination Framework
+
+
+import json
+from datetime import timedelta, datetime
+from django.db.models import Q
+from transportsimple.base.utils import base64decode, base64encode
+from transportsimple.base.exception_handler import InvalidDataError
+
+
+def filter_table(queryset, _filter_set,list_of_filters):
+
+    if isinstance(_filter_set, str) and _filter_set == '[]':
+        return queryset
+
+    if not _filter_set:
+        return queryset
+    
+    try:
+        _filter_set = json.loads(_filter_set)
+        for _ in _filter_set:
+            if _['key'] in list_of_filters:
+                pass
+            else:
+                raise InvalidDataError
+    except:
+        raise InvalidDataError
+    
+    conditions = Q()
+    for _ in _filter_set:
+        conditions.add(Q(**{f"{_['key']}__in":  _['values']}), Q.AND)
+
+    try:
+        q = queryset.filter(conditions)
+    except :
+        raise InvalidDataError
+    return q
+
+
+def filter_table(queryset, _filter_set, list_of_filters, added_filters):
+
+    if isinstance(_filter_set, str) and _filter_set == '[]':
+        return queryset
+    
+    if not _filter_set:
+        return queryset
+    
+    try:
+        _filter_set = json.loads(_filter_set)
+        for _ in _filter_set:
+            if _['key'] in list_of_filters:
+                pass
+            else:
+                raise InvalidDataError
+    except:
+        raise InvalidDataError
+    
+    conditions = Q()
+    if added_filters is None:
+        for _ in _filter_set:
+            conditions.add(Q(**{f"{_['key']}__in":  _['values']}), Q.AND)
+    else:
+        conditions = added_filters(_filter_set,conditions)
+
+    try:
+        q = queryset.filter(conditions)
+    except :
+        raise InvalidDataError
+    return q
+
+
+class Set_Filters:
+
+    def __init__(self,obj):
+        self.obj = obj
+        self.filters = {}
+    
+
+    def create(self,items):
+        filters = dict()
+        for key, display in items.items():
+            list_of_value = []
+            for _ in self.obj:
+                if _[f'{key}'] and _[f'{key}'] not in list_of_value:
+                    list_of_value.append(_[f'{key}'])
+            filters[f'{key}']  = {"field": f'{key}', "display": f'{display}',
+                                    "type": "value", "values": list_of_value}
+        self.filters = filters
+        return self.filters
+    
+
+    def add_custom_filters(self,custom_filters):
+        self.filters = {**self.filters, **custom_filters}
+        return self.filters
+
+class Scroll_Pagination:
+
+    def __init__(self,obj):
+        self.obj = obj
+        self.date = None
+        self.num_of_records = 20
+
+
+    def next_cursor(self,next_cursor=None,date=None):
+        self.date = date
+        if next_cursor:
+            if date:
+                last_date ,created_at = base64decode(next_cursor).split(';')
+                date_filter = Q(**{ f'{date}__lte': last_date}) & Q(created_at__lte=created_at)
+                self.obj = self.obj.filter(date_filter)
+            else:
+                created_at = base64decode(next_cursor)
+                self.obj = self.obj.filter(created_at__lte=created_at)
+        return self.obj
+
+
+    def filter_obj(self,query_filters=None,list_of_filters=[]):
+        if query_filters != "":
+            self.obj = filter_table(self.obj, query_filters,list_of_filters)
+        return self.obj
+    
+
+    def filter_obj(self,query_filters=None,list_of_filters=[],added_filters=None):
+        if query_filters != "":
+            self.obj = filter_table(self.obj, query_filters, list_of_filters, added_filters)
+        return self.obj
+
+
+    def search_obj(self,search=None,field_to_search={}):
+        if search:
+            or_condition = Q()
+            for key, value in field_to_search.items():
+                or_condition.add(Q(**{ f'{key}__icontains': value}), Q.OR)
+                self.obj = self.obj.filter(or_condition)
+        return self.obj
+    
+
+    def over_write_obj(self, new_obj):
+        self.obj = new_obj
+
+
+    def get_values(self,fields_to_get=[]):
+        num_of_records = self.num_of_records
+        date = self.date
+        try:
+            if date:
+                self.obj = self.obj.order_by(f'-{date}', '-created_at')
+            else:
+                self.obj = self.obj.order_by('-created_at')
+            self.obj = self.obj.values(*(fields_to_get))[0:num_of_records+1]
+        except IndexError:
+            self.obj = []
+        return self.obj
+
+
+    def get_next_cursor(self):
+        num_of_records = self.num_of_records
+        next_cursor = ""
+        try:
+            if len(self.obj) == num_of_records+1:
+                last_obj = self.obj[-1]
+                if self.date:
+                    next_cursor = base64encode(f"{str(last_obj[f'{self.date}'])};{str(last_obj['created_at'])}")
+                else:
+                    next_cursor = base64encode(f"{str(last_obj['created_at'])}")
+                obj = obj[:num_of_records]
+        except IndexError:
+            pass
+        return next_cursor
+    
